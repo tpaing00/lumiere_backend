@@ -4,7 +4,7 @@ module.exports = {
     commonjs: true,
     es2021: true,
   },
-  extends: 'airbnb',
+  extends: ['airbnb', 'prettier'],
   overrides: [
     {
       env: {
@@ -22,5 +22,8 @@ module.exports = {
     ecmaVersion: 'latest',
   },
   rules: {
+    semi: ['error', 'never'],
+    quotes: ['error', 'single'],
+    indent: ['error', 2],
   },
-};
+}
