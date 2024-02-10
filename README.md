@@ -1,7 +1,7 @@
 # Lumiere
 
 1. Make sure you have the following vscode extensions: Prettier and ESLint 
-2. When cloning the repo for the first time, install dependencies with "npm run Install" 
+2. When cloning the repo for the first time, install dependencies with "npm Install" 
 3. Execute "npm run dev" to run the server locally
 4. Test your site on browser using http://localhost:8080/  
 
