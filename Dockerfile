@@ -6,8 +6,6 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-USER node
-
 RUN npm install
 
 COPY . .
