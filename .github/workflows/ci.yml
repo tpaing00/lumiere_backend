@@ -20,7 +20,7 @@ jobs:
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
     - name: Build the Docker image
-      run: docker build -t Lumiere_BackEnd .
+      run: docker build -t lumiere_backend .
     - name: Push to Dockerhub
-      run: docker push tpaing00/Lumiere_BackEnd:latest
-  
+      run: docker push tpaing00/lumiere_backend:latest
+
