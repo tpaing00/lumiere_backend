@@ -23,3 +23,4 @@ jobs:
       run: docker build -t lumiere_backend .
     - name: Push to Dockerhub
       run: docker push tinzarpaing/lumiere_backend:latest
+
