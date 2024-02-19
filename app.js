@@ -10,6 +10,13 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/v1', router)
 
+app.get("/", (req, res, next) => {
+   res.json({
+        status:200,
+        message: "Hello world!"
+   })
+});
+
 app.get("/*", (req, res, next) => {
     res.contentType = 'text/plain';
     res.status(404);
