@@ -13,7 +13,7 @@ app.use('/api/v1', router)
 app.get("/", (req, res, next) => {
    res.json({
         status:200,
-        message: "Hello world!!! CI/CD is working fine!!! Update AgaiN :("
+        message: "Hello world!!! CI/CD is working fine!!! Update AgaiNNNN :("
    })
 });
 
