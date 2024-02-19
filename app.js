@@ -13,7 +13,7 @@ app.use('/api/v1', router)
 app.get("/", (req, res, next) => {
    res.json({
         status:200,
-        message: "Hello world!!!"
+        message: "Hello world!!! CICD is working fine!!!"
    })
 });
 
