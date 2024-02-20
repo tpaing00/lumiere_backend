@@ -20,7 +20,7 @@ jobs:
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
     - name: Build the Docker image
-      run: docker build --build-arg ENV_FILE=./.env -t tinzarpaing/lumiere_backend .
-      working-directory: C:\Paing\Langara_3\4980-Project2\Lumiere_BackEnd
+      run: docker build --build-arg ENV_FILE=.env -t tinzarpaing/lumiere_backend .
+      working-directory: ./C:/Paing/Langara_3/4980-Project2/Lumiere_BackEnd
     - name: Push to Dockerhub
       run: docker push tinzarpaing/lumiere_backend
