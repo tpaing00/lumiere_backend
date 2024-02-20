@@ -55,7 +55,10 @@ const getLogin = async(req, res) => {
                 if(!result) {
                     res.status(401).send('Incorrect password');
                 }
-                res.status(200).send("login successful");
+                // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
+                const token = jwt.sign({ id: user._id }, "7LYC4SlOHK59gbFTC6o9slaYdNW9aD2gjsGJG5pjWvvEk9aF8U8LsgQRtFHgdfz");
+
+                res.status(200).json({ token });
             })
             .catch((error) => {
                 console.error('Error comparing passwords:', error);
@@ -64,4 +67,4 @@ const getLogin = async(req, res) => {
         })
 };
 
-  module.exports = {setSignUp, getLogin};
+module.exports = {setSignUp, getLogin};
