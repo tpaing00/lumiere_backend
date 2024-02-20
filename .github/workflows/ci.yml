@@ -21,6 +21,5 @@ jobs:
 
     - name: Build the Docker image
       run: docker build --build-arg ENV_FILE=C:\Paing\Langara_3\4980-Project2\Lumiere_BackEnd\.env -t tinzarpaing/lumiere_backend .
-      run: docker build -t tinzarpaing/lumiere_backend .
     - name: Push to Dockerhub
       run: docker push tinzarpaing/lumiere_backend
