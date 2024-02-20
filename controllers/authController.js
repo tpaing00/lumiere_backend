@@ -48,12 +48,12 @@ const getLogin = async(req, res) => {
         .exec()
         .then(async(user) => {
             if (!user) {
-                res.status(404).send('User not found');
+                res.status(404).json({error : 'User not found'});
             }
             await bcrypt.compare(password, user.password)
             .then(result => {
                 if(!result) {
-                    res.status(401).send('Incorrect password');
+                    res.status(401).json({error :'Incorrect password'});
                 }
                 // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
                 const token = jwt.sign({ id: user._id }, "7LYC4SlOHK59gbFTC6o9slaYdNW9aD2gjsGJG5pjWvvEk9aF8U8LsgQRtFHgdfz");
