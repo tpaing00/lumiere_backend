@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const InventorySchema = new Schema({
-    inventoryId:{type: String, required:true, maxLength: 30},
-    userId:{type: String, required:true, maxLength: 30},
-    barcodeId:{type: String, required:true, maxLength: 30},
+    inventoryId:{type: String, required:true, maxLength: 30, default:"sampleInventoryId"},
+    userId:{type: String, required:true, maxLength: 30, default:"sampleUserId"},
+    barcodeId:{type: String, required:true, maxLength: 30, default:"sampleBarcodeId"},
     stockQuantity:{type: Number, default:0},
     dateAdded:{type : Date, default: Date.now },
     inStore:{type: Boolean, default: false},
