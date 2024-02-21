@@ -55,8 +55,7 @@ const getLogin = async(req, res) => {
                 if(!result) {
                     res.status(401).json({error :'Incorrect password'});
                 }
-                // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
-                const token = jwt.sign({ id: user._id }, "7LYC4SlOHK59gbFTC6o9slaYdNW9aD2gjsGJG5pjWvvEk9aF8U8LsgQRtFHgdfz");
+                const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
 
                 res.status(200).json({ token });
             })
