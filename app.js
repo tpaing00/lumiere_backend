@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
 const router = require('./routes'); //same as ('./routes/index')
@@ -7,6 +8,7 @@ require('./models/db');
 require('./models/Firebase');
 
 app.use(express.json());
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/v1', router)
 
