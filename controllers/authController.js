@@ -32,7 +32,7 @@ const setSignUp = async(req, res) => {
             });
         }
 
-    } catch (error) {
+    } catch(error) {
         res.status(500).json(error);
     };
 }
@@ -47,9 +47,9 @@ const getLogin = async(req, res) => {
             return res.status(404).json({error : 'User not found'});
         }
 
-        const results = await bcrypt.compare(password, user.password)
+        const results = await bcrypt.compare(password, user.password);
 
-        if(!result) {
+        if(!results) {
             return res.status(401).json({error :'Incorrect password'});
         }
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
