@@ -19,3 +19,6 @@ jobs:
       run: sudo docker rm -f lumiere_backend-container || true
     - name: Run Docker Container
       run: sudo docker run -d -p 8080:8080 --name lumiere_backend-container tinzarpaing/lumiere_backend
+    - name: Copy .env to Docker container
+      run: |
+        sudo docker cp /home/ubuntu/.env lumiere_backend-container:/usr/src/app/.env
