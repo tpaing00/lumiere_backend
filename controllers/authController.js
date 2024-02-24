@@ -7,63 +7,58 @@ const setSignUp = async(req, res) => {
 
     const { email, password } = req.body;
 
-    await User.findOne({ email })
-        .exec()
-        .then((results) => {
-            res.status(409).send('Email already exists');
-        })
-        .catch((error) => {
-            res.status(500).json(error);
-        });
-    
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    let user = new User(
-        {
-            ...req.body,
-            password: hashedPassword,
+    try {
+        const userExists = await User.findOne({ email }).exec();
+        if (userExists) {
+            return res.status(409).send('Email already exists');
         }
-    );
-    await user
-        .save()
-        .then((result) => {
-            const urlStr = `/api/v1/signup/${result.id}`;
-            // Set content-location header
+
+        const hashedPassword =  await bcrypt.hash(password, 10);
+
+        let user = new User(
+            {
+                ...req.body,
+                password: hashedPassword,
+            }
+        );
+
+        const results = await user.save();
+        if(results) {
+            const urlStr = `/api/v1/signup/${results.id}`;
             res.set("content-location", urlStr);
-            res.status(201).json({
-            url: urlStr,
-            data: result,
+             return res.status(201).json({
+                url: urlStr,
+                data: results,
             });
-        })
-        .catch((error) => {
-            res.status(500).json(error);
-        });
-};
+        }
+
+    } catch(error) {
+        res.status(500).json(error);
+    };
+}
 
 const getLogin = async(req, res) => {
 
     const { email, password } = req.body;
 
-    await User.findOne({ email })
-        .exec()
-        .then(async(user) => {
-            if (!user) {
-                res.status(404).json({error : 'User not found'});
-            }
-            await bcrypt.compare(password, user.password)
-            .then(result => {
-                if(!result) {
-                    res.status(401).json({error :'Incorrect password'});
-                }
-                const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
+    try{
+        const user = await User.findOne({ email }).exec();
+        if(!user) {
+            return res.status(404).json({error : 'User not found'});
+        }
 
-                res.status(200).json({ token });
-            })
-            .catch((error) => {
-                console.error('Error comparing passwords:', error);
-                res.status(500).json(error.message);
-            });   
-        })
-};
+        const results = await bcrypt.compare(password, user.password);
+
+        if(!results) {
+            return res.status(401).json({error :'Incorrect password'});
+        }
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
+        return res.status(200).json({ token });
+
+    } catch(error) {
+        console.error('Error comparing passwords:', error);
+        return res.status(500).json(error.message);
+    }
+}
 
 module.exports = {setSignUp, getLogin};
