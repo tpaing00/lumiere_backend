@@ -11,6 +11,6 @@ const ProductSchema = new Schema({
   expirationDate: {type : Date, required:true}
 })
 
-const Product = mongoose.model('Inventory', ProductSchema)
+const Product = mongoose.model('Product', ProductSchema)
 
 module.exports = Product
