@@ -13,7 +13,7 @@ const getProductsByBarcode = async(req, res) => {
         const productResults = await Product.find({ barcodeId: id }).exec(); 
         const inventoryResults = await Inventory.find({ barcodeId: id }).exec();
        
-        res.json({
+        res.status(200).json({
             productResults,
             inventoryResults
         });
