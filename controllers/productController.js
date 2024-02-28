@@ -70,14 +70,26 @@ const addProduct = async (req, res) => {
 };
 
 
-const getProductList = (req, res) => {
+const getProductList = async(req, res) => {
   const id = req.params.id;
-  if(typeof(id) == 'undefined') {
-    Product.find({}).exec().then(results => {
-      res.status(200).json(results);
-    }).catch(error => {
-      res.status(500).json(error)
-    })
+
+  try {
+    // send all product list
+    if(typeof(id) == 'undefined') {
+        let results = await Product.find({}).exec();
+        if(results !== null) {
+            res.status(200).json(results);
+        }
+    } else {
+      // send the product with barcode
+      let results = await Product.find({ barcodeId: id}).exec();
+      if(results !== null) {
+          res.status(200).json(results);
+      }
+    }
+  } catch(error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server Error' });
   }
 }
 

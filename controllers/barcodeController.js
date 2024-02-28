@@ -9,12 +9,11 @@ const getProductsByBarcode = async(req, res) => {
         if (typeof id == "undefined") {
             return res.status(400).json({ error: 'Barcode ID is missing' });
         }
-        
 
         const productResults = await Product.find({ barcodeId: id }).exec(); 
         const inventoryResults = await Inventory.find({ barcodeId: id }).exec();
        
-        res.json({
+        res.status(200).json({
             productResults,
             inventoryResults
         });
