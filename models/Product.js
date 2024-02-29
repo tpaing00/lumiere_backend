@@ -3,12 +3,12 @@ const {Schema} = mongoose
 
 const ProductSchema = new Schema({
   inventoryId: { type: String, required: true, maxLength: 30 },
-  barcodeId: { type: String, required: true, maxLength: 30 },
-  productName: { type: String },
-  brandName: { type: String },
-  unitCost: { type: Number },
+  barcodeNumber: { type: String, required: true, maxLength: 30 },
+  productName: { type: String, required: true },
+  brandName: { type: String, required: true },
+  totalValue: { type: Number, required: true },
   unitPrice: { type: Number, required: true },
-  addToCategory: { type: String, required: true },
+  category: { type: String, required: true , enum: ["Hair Care", "Skin Care", "Body Care", "Make Up"]},
   photo: { type: String, required: true },
   periodAfterOpening: { type: Number, required: true }
 });

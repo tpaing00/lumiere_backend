@@ -7,19 +7,19 @@ const addProduct = async (req, res) => {
     // Extract form data from JSON request body
     const {
       addToInventory,
-      addToCategory,
+      category,
       productName,
       brandName,
       stockQuantity,
       barcodeNumber,
       unitPrice,
-      unitCost,
+      totalValue,
       photo,
       expiryDate,
       periodAfterOpening,
-      lowStockAlert,
-      lowStockReminderTime,
-      expirationReminder,
+      isLowStockAlert,
+      lowStockThreshold,
+      isExpirationReminder,
       expirationReminderTime
     } = req.body;
 
@@ -36,15 +36,14 @@ const addProduct = async (req, res) => {
     // Create Product object
     const productData = {
       inventoryId: saveToInventory._id, // Use the _id of the created inventory
-      barcodeId: barcodeNumber,
+      barcodeNumber: barcodeNumber,
       productName: productName,
       brandName,
       unitPrice: parseFloat(unitPrice), // Convert string to number
-      unitCost: parseFloat(unitCost), // Convert string to number
-      addToCategory: addToCategory,
+      totalValue: parseFloat(totalValue), // Convert string to number
+      category: category,
       photo,
       periodAfterOpening: parseInt(periodAfterOpening), // Convert string to integer
-      stockQuantity: parseInt(stockQuantity), // Add stockQuantity to product
     };
     const product = new Product(productData);
     console.log("product data", product);
@@ -53,9 +52,9 @@ const addProduct = async (req, res) => {
     // Create Notification object
     const notificationData = {
       inventoryId: saveToInventory._id,
-      lowStockAlert: lowStockAlert,
-      lowStockReminderTime: parseInt(lowStockReminderTime),
-      expirationReminder: expirationReminder,
+      isLowStockAlert: isLowStockAlert,
+      lowStockThreshold: parseInt(lowStockThreshold),
+      isExpirationReminder: isExpirationReminder,
       expirationReminderTime: parseInt(expirationReminderTime)
     };
 
@@ -93,49 +92,7 @@ const getProductList = async(req, res) => {
   }
 }
 
-// const searchProductList = (req, res) => {
-//   console.log("inside search product list");
-//   const { keywords, category, brandName, usage, status } = req.query;
 
-//   let filter = {};
-
-//   // Apply filters based on query parameters
-//   if (category) {
-//     filter.category = category;
-//   }
-//   if (brandName) {
-//     filter.brandName = brandName;
-//   }
-//   if (usage) {
-//     filter.usage = usage;
-//   }
-//   if (status) {
-//     filter.status = status;
-//   }
-
-//   // Perform search based on keywords
-//   let searchQuery = {};
-//   if (keywords) {
-//     searchQuery = {
-//       $or: [
-//         { productName: { $regex: keywords, $options: 'i' } } // Search productName for keywords
-//       ],
-//     };
-//   }
-
-//   // Combine filter and search queries
-//   // const finalQuery = { ...filter, ...searchQuery };
-
-
-//   Product.find(searchQuery)
-//     .exec()
-//     .then((results) => {
-//       res.status(200).json(results);
-//     })
-//     .catch((error) => {
-//       res.status(500).json(error);
-//     });
-// };
 const searchProductList = (req, res) => {
   console.log("inside search product list");
   const { keywords, category, brandName, usage, status } = req.query;

@@ -10,10 +10,10 @@ const NotificationSchema = new Schema({
   // notificationStartDate: { type: Date, required: true },
   // notificationEndDate: { type: Date, required: true },
   // activeStatus: { type: Boolean, required: true },
-  lowStockAlert: { type: String, enum: ["on", "off"] },
-  lowStockReminderTime: { type: Number },
-  expirationReminder: { type: String, enum: ["on", "off"] },
-  expirationReminderTime: { type: Number }
+  isLowStockAlert: { type: Boolean, required: true },
+  lowStockThreshold: { type: Number, required: true, default: 0 },
+  isExpirationReminder: { type: Boolean, required: true },
+  expirationReminderTime: { type: Number, required: true, default: 0 }
 });
 
 const Notification = mongoose.model('Notification', NotificationSchema);
