@@ -10,8 +10,8 @@ const getProductsByBarcode = async(req, res) => {
             return res.status(400).json({ error: 'Barcode ID is missing' });
         }
 
-        const productResults = await Product.find({ barcodeId: id }).exec(); 
-        const inventoryResults = await Inventory.find({ barcodeId: id }).exec();
+        const productResults = await Product.find({ barcodeNumber: id }).exec(); 
+        const inventoryResults = await Inventory.find({ barcodeNumber: id }).exec();
        
         res.status(200).json({
             productResults,

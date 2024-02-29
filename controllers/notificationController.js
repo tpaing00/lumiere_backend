@@ -21,6 +21,4 @@ const getNotification = async(req, res) => {
     }
 }
 
-module.exports = {
-    getNotification
-}
+module.exports = { getNotification }

@@ -81,7 +81,7 @@ const getProductList = async(req, res) => {
         }
     } else {
       // send the product with barcode
-      let results = await Product.find({ barcodeId: id}).exec();
+      let results = await Product.find({ barcodeNumber: id}).exec();
       if(results !== null) {
           res.status(200).json(results);
       }
