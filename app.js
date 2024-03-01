@@ -12,10 +12,10 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/v1', router)
 
-app.use("/", function(req, res) {
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.end("Hello, World!\n\n💚 🔒.js");
-});
+// app.use("/", function(req, res) {
+//     res.setHeader("Content-Type", "text/html; charset=utf-8");
+//     res.end("Hello, World!\n\n💚 🔒.js");
+// });
 
 app.get("/", (req, res, next) => {
    res.json({
@@ -34,4 +34,4 @@ app.listen(8080, () => {
     console.log("Server running on port 8080.");
 });
 
-module.exports = app;
+// module.exports = app;
