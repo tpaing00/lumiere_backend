@@ -1,5 +1,5 @@
 const Inventory = require('../models/Inventory');
-const InternalUse = require('../models/InternalUse');
+const InternalUse = require('../models/internalUse');
 const Sale = require('../models/Sale');
 const Notification = require('../models/Notification');
 
