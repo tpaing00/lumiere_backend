@@ -6,6 +6,7 @@ const addProduct = async (req, res) => {
   try {
     // Extract form data from JSON request body
     const {
+      userId,
       addToInventory,
       category,
       productName,
@@ -13,7 +14,6 @@ const addProduct = async (req, res) => {
       stockQuantity,
       barcodeNumber,
       unitPrice,
-      totalValue,
       photo,
       expiryDate,
       periodAfterOpening,
@@ -26,21 +26,22 @@ const addProduct = async (req, res) => {
 
     // Create Inventory object
     const inventoryData = {
+      userId,
+      barcodeNumber,
       addToInventory: addToInventory, // Convert string to boolean
       expiryDate: new Date(expiryDate), // Convert string to date
-      stockQuantity: parseInt(stockQuantity), // Convert string to integer
+      stockQuantity: parseInt(stockQuantity),// Convert string to integer
+      totalValue: parseFloat(unitPrice * stockQuantity) // Convert string to number 
     };
     const inventory = new Inventory(inventoryData);
     const saveToInventory = await inventory.save();
 
     // Create Product object
     const productData = {
-      inventoryId: saveToInventory._id, // Use the _id of the created inventory
       barcodeNumber: barcodeNumber,
       productName: productName,
       brandName,
       unitPrice: parseFloat(unitPrice), // Convert string to number
-      totalValue: parseFloat(totalValue), // Convert string to number
       category: category,
       photo,
       periodAfterOpening: parseInt(periodAfterOpening), // Convert string to integer
@@ -101,7 +102,7 @@ const searchProductList = (req, res) => {
 
   // Apply filters based on query parameters
   if (category) {
-    filter.addToCategory = category;
+    filter.category = category;
   }
   if (brandName) {
     filter.brandName = brandName;
