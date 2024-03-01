@@ -3,6 +3,9 @@ const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
 const router = require('./routes'); //same as ('./routes/index')
+const greenlockExpress = require('greenlock-express');
+const http = require('http');
+const https = require('https');
 
 require('./models/db');
 require('./models/Firebase');
@@ -12,10 +15,21 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/v1', router)
 
-// app.use("/", function(req, res) {
-//     res.setHeader("Content-Type", "text/html; charset=utf-8");
-//     res.end("Hello, World!\n\n💚 🔒.js");
-// });
+// Set up HTTP server to redirect to HTTPS
+http.createServer(greenlockExpress.init({
+    packageRoot: __dirname,
+    configDir: './greenlock.d',
+    maintainerEmail: 'tinzarpaing@gmail.com',
+    cluster: false
+  })).listen(80);
+  
+  // Set up HTTPS server
+  https.createServer(greenlockExpress.init({
+    packageRoot: __dirname,
+    configDir: './greenlock.d',
+    maintainerEmail: 'tinzarpaing@gmail.com',
+    cluster: false
+  })).listen(443);
 
 app.get("/", (req, res, next) => {
    res.json({
