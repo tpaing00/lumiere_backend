@@ -34,7 +34,7 @@ http.createServer(greenlockExpress.init({
 app.get("/", (req, res, next) => {
    res.json({
         status:200,
-        message: "Hello world!!! CI/CD is working fine!!! ENV file added via docker script"
+        message: "Hello world!!! CI/CD is working fine!!! ENV file added via docker script. Now need to fix domain name and SSL!"
    })
 });
 
