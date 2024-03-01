@@ -6,11 +6,13 @@ const authRouter = require('./auth');
 const productRouter = require('./product');
 const barcodeRouter = require('./barcode');
 const notificationRouter = require('./notification');
+const checkoutRouter = require('./checkout');
 
 router.use(inventoryRouter);
 router.use(authRouter);
 router.use(productRouter);
 router.use(barcodeRouter);
 router.use(notificationRouter);
+router.use(checkoutRouter);
 
 module.exports = router;
