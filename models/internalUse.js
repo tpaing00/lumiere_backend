@@ -6,7 +6,7 @@ const InternalUseSchema = new Schema({
     inventoryId: { type: String, required: true, maxLength: 30 },
     userId: {type: String, required:true, maxLength: 30, default:"sampleUserId" },
     openingDate: {type : Date, required:true },
-    reminderDate: {type : Date, required:true },
+    reminderTime: { type: Number, required: true, default: 0 },
     useByDate: {type : Date, required:true },
     quantity: {type: Number, default:0 },
     reason: { type: String }
