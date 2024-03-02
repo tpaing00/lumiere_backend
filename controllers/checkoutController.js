@@ -42,7 +42,7 @@ const checkoutProduct = async (req, res) => {
         console.log('Inventory updated successfully');
         console.log(UpdatatedInventoryResults);  
             
-        // const updatedInventory = await Inventory.find({ _id: inventoryId });
+        const updatedInventory = await Inventory.find({ _id: inventoryId });
         
         let saleResults = ""
         let internalUseResults = ""
@@ -87,7 +87,7 @@ const checkoutProduct = async (req, res) => {
                 notificationResults = await notification.save();
             }
         }    
-        res.status(201).json({ UpdatatedInventoryResults, internalUseResults, notificationResults, saleResults });
+        res.status(201).json({ updatedInventory });
 
     } catch (error) {
         console.error(error);
