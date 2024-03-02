@@ -1,6 +1,6 @@
 
 const Product = require('../models/Product');
-Inventory = require("../models/Inventory");
+const Inventory = require("../models/Inventory");
 
 const getProductsByBarcode = async(req, res) => {
     const id = req.params.id;

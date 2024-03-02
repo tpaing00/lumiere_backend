@@ -7,7 +7,7 @@ const ProductSchema = new Schema({
   brandName: { type: String, required: true },
   unitPrice: { type: Number, required: true },
   category: { type: String, required: true , enum: ["Hair Care", "Skin Care", "Body Care", "Make Up"]},
-  photo: { type: String, required: true },
+  photo: { type: Array, required: true },
   periodAfterOpening: { type: Number, required: true }
 });
 
