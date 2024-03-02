@@ -4,8 +4,8 @@ const {Schema} = mongoose
 const SaleSchema = new Schema({
     inventoryId: { type: String, required: true, maxLength: 30 },
     userId: {type: String, required:true, maxLength: 30, default:"sampleUserId" },
-    soldQuantity: {type : Date, required:true },
-    soldDate: {type : Date, required:true },
+    soldQuantity: {type : Number, required:true },
+    soldDate: {type : Date, required:true, default: Date.now},
     reason: { type: String }
 });
 

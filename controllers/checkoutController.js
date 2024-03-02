@@ -1,5 +1,5 @@
 const Inventory = require('../models/Inventory');
-const InternalUse = require('../models/internalUse');
+const InternalUse = require('../models/InternalUse');
 const Sale = require('../models/Sale');
 const Notification = require('../models/Notification');
 
@@ -9,31 +9,58 @@ const checkoutProduct = async (req, res) => {
         const {
             userId,
             inventoryId,
-            barcodeNumber,
-            category,
+            addToInventory,
             quantity,
             reason,
             openingDate,
             useByDate,
+            isExpirationReminder,
             reminderTime,
-            soldDate
+            checkoutDate,
+            soldQuantity,
+            soldDate    
         } = req.body;
 
-
-        if(category == "Retail"){
+        // Add the filter for update
+        const filter = { _id: inventoryId };
+        // Define the update operation
+        let update = ""
+        if(addToInventory == "Retail") {
+            update = {
+                $inc: {
+                    stockQuantity: -soldQuantity 
+                }
+            };
+        } else {
+            update = {
+                $inc: {
+                    stockQuantity: -quantity 
+                }
+            };
+        }
+        const UpdatatedInventoryResults = await Inventory.updateOne(filter, update);
+        console.log('Inventory updated successfully');
+        console.log(UpdatatedInventoryResults);  
+            
+        const updatedInventory = await Inventory.find({ _id: inventoryId });
+        
+        let saleResults = ""
+        let internalUseResults = ""
+        let notificationResults = ""
+        if(addToInventory == "Retail") {
             // Create Sale object
             let sale = new Sale(
                 {
                     inventoryId,
                     userId,
-                    soldQuantity : parseInt(quantity),
+                    soldQuantity : parseInt(soldQuantity),
                     soldDate : new Date(soldDate),
                     reason
                 }
             );
-            const saleResults = await sale.save();
+            saleResults = await sale.save();
         } else {
-            if(category == "Internal Use") {
+            if(addToInventory == "Internal Use") {
                 // Create InternalUse object
                 let internalUse = new InternalUse(
                     {
@@ -43,10 +70,11 @@ const checkoutProduct = async (req, res) => {
                         reminderTime :parseInt(reminderTime),
                         useByDate,
                         quantity : parseInt(quantity),
-                        reason
+                        reason,
+                        checkoutDate
                     }
                 );
-                const internalUseResults = await internalUse.save();
+                internalUseResults = await internalUse.save();
 
                 // Create Notification object
                 let notification = new Notification(
@@ -56,11 +84,10 @@ const checkoutProduct = async (req, res) => {
                         expirationReminderTime: parseInt(reminderTime)
                     }
                 );
-                const notificationResults = await notification.save();
+                notificationResults = await notification.save();
             }
         }    
-
-        res.status(201).json({ internalUseResults, notificationResults, saleResults });
+        res.status(201).json({ updatedInventory });
 
     } catch (error) {
         console.error(error);
