@@ -3,7 +3,7 @@ const {Schema} = mongoose
 
 const NotificationSchema = new Schema({
   stockKeepingUnit: { type: String, maxLength: 30 },
-  inventoryId: { type: String, maxLength: 30 },
+  inventoryId: { type: Object, maxLength: 30 },
   message: { type: String, default: "default message" },
   // dayInAdvance: { type: Number },
   lowStockQuantity: { type: Number, default:5},
