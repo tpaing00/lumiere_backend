@@ -94,35 +94,34 @@ const getActiveNotificationList = async(req, res) => {
             }
           ])
 
-          let internalUseExpiryResults = await Inventory.aggregate([
-            {
-                $lookup: {
-                  from: "notifications",
-                  localField: "_id",
-                  foreignField: "inventoryId",
-                  as: "notificationResults"
-                }
-            },
-            {
-                $match: {
-                    $and: [
-                        { "notificationResults.isExpirationReminder": true },
-                        { "notificationResults.isExpirationReminder": true },
-                        {
-                            $expr: {
-                                $gt: [
-                                    { $arrayElemAt: ["$notificationResults.lowStockThreshold", 0] },
-                                     "$stockQuantity"
-                                ]
-                            }
-                        }
-                    ]  
-                }
-            }
-          ])
+        //   let internalUseExpiryResults = await Inventory.aggregate([
+        //     {
+        //         $lookup: {
+        //           from: "notifications",
+        //           localField: "_id",
+        //           foreignField: "inventoryId",
+        //           as: "notificationResults"
+        //         }
+        //     },
+        //     {
+        //         $match: {
+        //             $and: [
+        //                 { "notificationResults.isExpirationReminder": true },
+        //                 {
+        //                     $expr: {
+        //                         $gt: [
+        //                             { $arrayElemAt: ["$notificationResults.lowStockThreshold", 0] },
+        //                              "$stockQuantity"
+        //                         ]
+        //                     }
+        //                 }
+        //             ]  
+        //         }
+        //     }
+        //   ])
 
-          if(lowStockResults !== null || expiryResults !== null || internalUseExpiryResults != null) {
-            res.status(200).json({lowStockResultsLength : lowStockResults.length, lowStockResults, expiryResults, internalUseExpiryResults});
+          if(lowStockResults !== null || expiryResults !== null ) {
+            res.status(200).json({lowStockResultsLength : lowStockResults.length, lowStockResults, expiryResults });
         }
       } catch(error) {
           console.error(error);
