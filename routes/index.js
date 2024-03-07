@@ -8,6 +8,7 @@ const barcodeRouter = require('./barcode');
 const notificationRouter = require('./notification');
 const checkoutRouter = require('./checkout');
 const internalUseRouter = require('./internalUse');
+const wasteRouter = require('./waste');
 
 const authCtrl = require('../controllers/authController');
 
@@ -25,5 +26,6 @@ router.use(barcodeRouter);
 router.use(notificationRouter);
 router.use(checkoutRouter);
 router.use(internalUseRouter);
+router.use(wasteRouter);
 
 module.exports = router;
