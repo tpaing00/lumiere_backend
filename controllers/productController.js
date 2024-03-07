@@ -11,8 +11,6 @@ const bucket = firebaseAdmin.storage().bucket();
 
 
 const addProduct = async (req, res) => {
-  console.log("req.body", req.body);
-  console.log("req.files", req.files);
 
   try {
     // Extract form data from JSON request body
@@ -49,14 +47,12 @@ const addProduct = async (req, res) => {
         contentType: photoFile.mimetype
       });
 
-      console.log("upload result", uploadResult);
 
       // Get the download URL of the uploaded file
   const [downloadUrl] = await file.getSignedUrl({
     action: 'read',
     expires: '03-09-2025' // Set an expiration date for the URL if needed
   });
-  console.log("download url", downloadUrl);
 
   if (downloadUrl) {
     photoUrls.push(downloadUrl);
@@ -89,7 +85,6 @@ const addProduct = async (req, res) => {
       periodAfterOpening: parseInt(periodAfterOpening), // Convert string to integer
     };
     const product = new Product(productData);
-    console.log("product data", product);
     await product.save();
 
     // Create Notification object
@@ -137,7 +132,6 @@ const getProductList = async(req, res) => {
 
 
 const searchProductList = (req, res) => {
-  console.log("inside search product list");
   const { keywords, category, brandName, usage, status } = req.query;
 
   let filter = {};
