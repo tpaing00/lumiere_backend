@@ -1,5 +1,10 @@
 const express = require('express');
+const multer = require('multer');
 const router = express.Router({mergeParams:true});
+// Set up Multer middleware for handling form data with file uploads
+const storage = multer.memoryStorage(); // Store files in memory instead of disk
+const upload = multer({ storage: storage });
+
 
 
 const productController = require('../controllers/productController');
@@ -9,7 +14,7 @@ const productController = require('../controllers/productController');
 
 // Route for adding a product
 router.get('/search', productController.searchProductList);
-router.post('/add-product', productController.addProduct);
+router.post('/add-product', upload.array('images', 10), productController.addProduct);
 router.get('/products', productController.getProductList);
 router.get('/products/:id', productController.getProductList);
 

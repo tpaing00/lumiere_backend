@@ -1,4 +1,4 @@
-// require('dotenv').config(); // Load environment variables from .env file
+require('dotenv').config(); // Load environment variables from .env file
 // const firebase = require('firebase/app');
 // //const firebase = require('firebase');
 // require('firebase/auth');
@@ -16,15 +16,16 @@
 
 // firebase.initializeApp(firebaseConfig);
 
-const admin = require('firebase-admin');
 
 
-// Initialize Firebase Admin SDK
-const serviceAccount = require('../key/serviceAccountKey.json'); // Path to your service account key file
-const firebaseAdminConfig = {
-    credential: admin.credential.cert(serviceAccount)
+const firebaseAdmin = require('firebase-admin');
+const serviceAccount = require('../key/serviceAccountKey.json'); 
+
+const firebaseConfig = {
+    credential: firebaseAdmin.credential.cert(serviceAccount),
+    storageBucket: 'gs://'+process.env.FIREBASE_STORAGE_BUCKET
 };
 
-admin.initializeApp(firebaseAdminConfig);
+firebaseAdmin.initializeApp(firebaseConfig);
 
-module.exports = admin;
+module.exports = firebaseAdmin;
