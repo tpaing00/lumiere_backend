@@ -1,4 +1,4 @@
-Inventory = require("../models/Inventory");
+const Inventory = require("../models/Inventory");
 
 const getInventory = (req, res) => {
     const id = req.params.id;
