@@ -1,8 +1,19 @@
 const Inventory = require('../models/Inventory');
 const Product = require('../models/Product');
 const Notification = require('../models/Notification');
+const firebaseAdmin = require('../models/Firebase.js');
+
+const { Readable } = require('stream');
+
+
+
+const bucket = firebaseAdmin.storage().bucket();
+
 
 const addProduct = async (req, res) => {
+  console.log("req.body", req.body);
+  console.log("req.files", req.files);
+
   try {
     // Extract form data from JSON request body
     const {
@@ -14,7 +25,6 @@ const addProduct = async (req, res) => {
       stockQuantity,
       barcodeNumber,
       unitPrice,
-      photo,
       expiryDate,
       periodAfterOpening,
       isLowStockAlert,
@@ -22,6 +32,38 @@ const addProduct = async (req, res) => {
       isExpirationReminder,
       expirationReminderTime
     } = req.body;
+
+    const photoFiles = req.files;
+    if (!photoFiles || photoFiles.length === 0) {
+      return res.status(400).json({ error: 'No image files uploaded' });
+    }
+
+
+    const photoUrls = [];
+
+    
+    for (const photoFile of photoFiles) {
+      // Upload the file buffer to Firebase Storage
+      const file = bucket.file(`productPhotos/${photoFile.originalname}`);
+      const uploadResult = await file.save(photoFile.buffer, {
+        contentType: photoFile.mimetype
+      });
+
+      console.log("upload result", uploadResult);
+
+      // Get the download URL of the uploaded file
+  const [downloadUrl] = await file.getSignedUrl({
+    action: 'read',
+    expires: '03-09-2025' // Set an expiration date for the URL if needed
+  });
+  console.log("download url", downloadUrl);
+
+  if (downloadUrl) {
+    photoUrls.push(downloadUrl);
+  } else {
+    console.error('Error getting download URL');
+  }
+    }
 
 
     // Create Inventory object
@@ -43,7 +85,7 @@ const addProduct = async (req, res) => {
       brandName,
       unitPrice: parseFloat(unitPrice), // Convert string to number
       category: category,
-      photo,
+      photo:photoUrls,
       periodAfterOpening: parseInt(periodAfterOpening), // Convert string to integer
     };
     const product = new Product(productData);
