@@ -9,6 +9,7 @@ const notificationRouter = require('./notification');
 const checkoutRouter = require('./checkout');
 const internalUseRouter = require('./internalUse');
 const wasteRouter = require('./waste');
+const userRouter = require('./user');
 
 const authCtrl = require('../controllers/authController');
 
@@ -27,5 +28,6 @@ router.use(notificationRouter);
 router.use(checkoutRouter);
 router.use(internalUseRouter);
 router.use(wasteRouter);
+router.use(userRouter);
 
 module.exports = router;
