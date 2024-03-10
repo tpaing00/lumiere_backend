@@ -5,10 +5,7 @@ const firebaseAdmin = require('../models/Firebase.js');
 
 const { Readable } = require('stream');
 
-
-
 const bucket = firebaseAdmin.storage().bucket();
-
 
 const addProduct = async (req, res) => {
 
@@ -106,7 +103,6 @@ const addProduct = async (req, res) => {
   }
 };
 
-
 const getProductList = async(req, res) => {
   const id = req.params.id;
 
@@ -128,8 +124,7 @@ const getProductList = async(req, res) => {
       console.error(error);
       res.status(500).json({ message: 'Server Error' });
   }
-}
-
+};
 
 const searchProductList = (req, res) => {
   const { keywords, category, brandName, usage, status } = req.query;
@@ -202,10 +197,11 @@ const deleteProduct = async (req, res) => {
 
     if (inventoryCount > 1) {
       await Inventory.findOneAndDelete({ _id: inventoryRowToDelete._id });
+      //need to delete Notification base on inventoryId and addToInventory
     } else {
       await Inventory.findOneAndDelete({ _id: inventoryRowToDelete._id });
       await Product.deleteOne({ barcodeNumber });
-      await Notification.deleteOne({ inventoryRowToDelete });
+      await Notification.deleteOne({ inventoryId: inventoryRowToDelete._id });
     }
 
     res.status(200).json({ message: 'Product deleted successfully' });
@@ -214,10 +210,6 @@ const deleteProduct = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
-
-
-
-
 
 module.exports = {
   addProduct,
