@@ -68,9 +68,8 @@ const saveWaste = async (req, res) => {
 };
 
 const deleteWaste = async (req, res) => {
-  try {
+  try {    
     const { wasteId } = req.body;
-
     if (!wasteId) {
       return res
         .status(400)
@@ -78,7 +77,7 @@ const deleteWaste = async (req, res) => {
     }
 
     if (wasteId !== "") {
-      await Notification.deleteOne({  _id: wasteId });
+      await Waste.deleteOne({  _id: wasteId });
     }else {
       return res
       .status(400)
