@@ -54,7 +54,7 @@ const getLogin = async(req, res) => {
             return res.status(401).json({error :'Incorrect password'});
         }
         const token = jwt.sign({id :user._id}, process.env.JWT_SECRET_KEY,{expiresIn : '1d'});
-        return res.status(200).json({ token });
+        return res.status(200).json({ token ,firstName: user.firstName, photo:user.photo});
 
     } catch(error) {
         console.error('Error comparing passwords:', error);
