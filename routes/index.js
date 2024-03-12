@@ -17,9 +17,9 @@ const authCtrl = require('../controllers/authController');
 router.use(authRouter);
 
 // Middleware to verify token
-router.use((req, res, next) => {
-    authCtrl.verifyToken(req, res, next);
-});
+// router.use((req, res, next) => {
+//     authCtrl.verifyToken(req, res, next);
+// });
 
 router.use(inventoryRouter);
 router.use(productRouter);
