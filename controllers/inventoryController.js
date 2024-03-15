@@ -83,9 +83,76 @@ const getTotalInventoryValue = (req, res) => {
     });
 };
 
+const getCountExpiredInventory = (req, res) => {
+  const currentDate = new Date(); // Get the current date
+  currentDate.setHours(0, 0, 0, 0); // Set time to midnight (00:00:00)
+
+  Inventory.aggregate([
+    {
+      $match: {
+        expiryDate: { $lte: currentDate }, // Find documents where expiryDate is less than or equal to the current date
+        stockQuantity: { $gt: 0 } // Ensure stockQuantity is greater than 0
+      }
+    },
+    {
+      $group: {
+        _id: null,
+        totalExpiredProducts: { $sum: "$stockQuantity" } // Sum the stockQuantity of expired products
+      }
+    }
+  ])
+  .exec()
+  .then((result) => {
+    if (result.length > 0) {
+      res.status(200).json({ totalExpiredProducts: result[0].totalExpiredProducts });
+    } else {
+      res.status(200).json({ totalExpiredProducts: 0 }); // If there are no expired products, return 0
+    }
+  })
+  .catch((error) => {
+    res.status(500).json(error);
+  });
+};
+
+const getCountNearlyExpiredInventory = (req, res) => {
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0); 
+  const thirtyDaysLater = new Date();
+  thirtyDaysLater.setDate(currentDate.getDate() + 30); // Calculate date 30 days from now
+  thirtyDaysLater.setHours(0, 0, 0, 0); 
+
+  Inventory.aggregate([
+    {
+      $match: {
+        expiryDate: { $gte: currentDate, $lte: thirtyDaysLater }, // Find documents where expiryDate is within the next 30 days
+        stockQuantity: { $gt: 0 }
+      }
+    },
+    {
+      $group: {
+        _id: null,
+        totalNearlyExpiredProducts: { $sum: "$stockQuantity" }
+      }
+    }
+  ])
+  .exec()
+  .then((result) => {
+    if (result.length > 0) {
+      res.status(200).json({ totalNearlyExpiredProducts: result[0].totalNearlyExpiredProducts });
+    } else {
+      res.status(200).json({ totalNearlyExpiredProducts: 0 });
+    }
+  })
+  .catch((error) => {
+    res.status(500).json(error);
+  });
+};
+
 module.exports = {
   getInventory,
   saveInventory,
   getTotalInventory,
   getTotalInventoryValue,
+  getCountExpiredInventory,
+  getCountNearlyExpiredInventory
 };
