@@ -5,7 +5,7 @@ const InventorySchema = new Schema({
     userId:{type: String, required:true, maxLength: 30, default:"sampleUserId"},
     barcodeNumber:{type: String, required:true, maxLength: 30},
     stockQuantity:{type: Number, default:0, set: setInitialStock},
-    initialStock: { type: Number, default: 0 },
+    initialStock: { type: Number},
     totalValue: { type: Number, required: true },
     dateAdded:{type : Date, default: Date.now },
     addToInventory:{type: String, enum: ["Internal Use", "Retail"]},
@@ -14,9 +14,7 @@ const InventorySchema = new Schema({
 
 // Define setter
 function setInitialStock(stock) {
-    if (!this.initialQuantity) {
-        this.initialQuantity = stock;
-    }
+        this.initialStock = stock;
     return stock;
 }
 
