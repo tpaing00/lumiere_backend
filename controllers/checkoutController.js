@@ -17,8 +17,12 @@ const checkoutProduct = async (req, res) => {
             isExpirationReminder,
             reminderTime,
             checkoutDate,
+            productName,
+            brandName,
+            category,
+            unitPrice,
             soldQuantity,
-            soldDate    
+            soldDate   
         } = req.body;
 
         // Add the filter for update
@@ -28,13 +32,15 @@ const checkoutProduct = async (req, res) => {
         if(addToInventory == "Retail") {
             update = {
                 $inc: {
-                    stockQuantity: -soldQuantity 
+                    stockQuantity: -soldQuantity,
+                    totalValue:-(unitPrice * soldQuantity) 
                 }
             };
         } else {
             update = {
                 $inc: {
-                    stockQuantity: -quantity 
+                    stockQuantity: -quantity,
+                    totalValue:-(unitPrice * quantity) 
                 }
             };
         }
@@ -53,6 +59,9 @@ const checkoutProduct = async (req, res) => {
                 {
                     inventoryId,
                     userId,
+                    productName,
+                    brandName,
+                    category,
                     soldQuantity : parseInt(soldQuantity),
                     soldDate : new Date(soldDate),
                     reason
