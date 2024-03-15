@@ -8,7 +8,8 @@ const ProductSchema = new Schema({
   unitPrice: { type: Number, required: true },
   category: { type: String, required: true , enum: ["Hair Care", "Skin Care", "Body Care", "Make Up"]},
   photo: { type: Array },
-  periodAfterOpening: { type: Number, required: true }
+  periodAfterOpening: { type: Number, required: true },
+  message: { type: String }
 });
 
 const Product = mongoose.model('Product', ProductSchema)
