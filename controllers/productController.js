@@ -25,7 +25,8 @@ const addProduct = async (req, res) => {
       isLowStockAlert,
       lowStockThreshold,
       isExpirationReminder,
-      expirationReminderTime
+      expirationReminderTime,
+      message
     } = req.body;
 
     const photoFiles = req.files;
@@ -80,6 +81,7 @@ const addProduct = async (req, res) => {
       category: category,
       photo:photoUrls,
       periodAfterOpening: parseInt(periodAfterOpening), // Convert string to integer
+      message
     };
     const product = new Product(productData);
     await product.save();
