@@ -148,11 +148,108 @@ const getCountNearlyExpiredInventory = (req, res) => {
   });
 };
 
+const getTotalStockByCategory = (req, res) => {
+  const { fromDate, toDate } = req.query;
+
+  // Define the match stage based on the provided dates
+  const matchStage = {};
+  if (fromDate && toDate) {
+    matchStage.dateAdded = { $gte: new Date(fromDate), $lte: new Date(toDate) };
+  }
+
+  // Aggregate pipeline stages
+  const pipeline = [
+    // Match stage to filter documents by dateAdded if provided
+    { $match: matchStage },
+
+    // Lookup stage to join Inventory with Product based on barcodeNumber
+    {
+      $lookup: {
+        from: 'products',
+        localField: 'barcodeNumber',
+        foreignField: 'barcodeNumber',
+        as: 'product'
+      }
+    },
+
+    // Unwind stage to destructure the product array
+    { $unwind: '$product' },
+
+    // Group stage to group documents by category and calculate total stockQuantity
+    {
+      $group: {
+        _id: '$product.category',
+        totalStockQuantity: { $sum: '$stockQuantity' }
+      }
+    }
+  ];
+
+  // Execute the aggregation pipeline
+  Inventory.aggregate(pipeline)
+    .exec()
+    .then((results) => {
+      res.status(200).json(results);
+    })
+    .catch((error) => {
+      res.status(500).json(error);
+    });
+};
+
+const getTotalStockByCategoryWithData = (req, res) => {
+  const { fromDate, toDate } = req.query;
+
+  // Define the match stage based on the provided dates
+  const matchStage = {};
+  if (fromDate && toDate) {
+    matchStage.dateAdded = { $gte: new Date(fromDate), $lte: new Date(toDate) };
+  }
+
+  // Aggregate pipeline stages
+  const pipeline = [
+    // Match stage to filter documents by dateAdded if provided
+    { $match: matchStage },
+
+    // Lookup stage to join Inventory with Product based on barcodeNumber
+    {
+      $lookup: {
+        from: 'products',
+        localField: 'barcodeNumber',
+        foreignField: 'barcodeNumber',
+        as: 'product'
+      }
+    },
+
+    // Unwind stage to destructure the product array
+    { $unwind: '$product' },
+
+    // Group stage to group documents by category and calculate total stockQuantity
+    {
+      $group: {
+        _id: '$product.category',
+        totalStockQuantity: { $sum: '$stockQuantity' },
+        data: { $push: '$$ROOT' }
+      }
+    }
+  ];
+
+  // Execute the aggregation pipeline
+  Inventory.aggregate(pipeline)
+    .exec()
+    .then((results) => {
+      res.status(200).json(results);
+    })
+    .catch((error) => {
+      res.status(500).json(error);
+    });
+};
+
 module.exports = {
   getInventory,
   saveInventory,
   getTotalInventory,
   getTotalInventoryValue,
   getCountExpiredInventory,
-  getCountNearlyExpiredInventory
+  getCountNearlyExpiredInventory,
+  getTotalStockByCategory,
+  getTotalStockByCategoryWithData
 };
