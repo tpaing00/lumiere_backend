@@ -10,5 +10,7 @@ router.get("/totalinventory", inventoryCtrl.getTotalInventory);
 router.get("/totalinventoryvalue", inventoryCtrl.getTotalInventoryValue);
 router.get("/getexpiredinventory", inventoryCtrl.getCountExpiredInventory);
 router.get("/getnearlyexpiredinventory", inventoryCtrl.getCountNearlyExpiredInventory);
+router.get("/gettotalinventorybycategory", inventoryCtrl.getTotalStockByCategory);
+router.get("/gettotalinventorybycategorywithdata", inventoryCtrl.getTotalStockByCategoryWithData);
 
 module.exports = router;
