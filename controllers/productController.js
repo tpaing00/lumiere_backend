@@ -4,6 +4,7 @@ const Notification = require('../models/Notification');
 const firebaseAdmin = require('../models/Firebase.js');
 
 const { Readable } = require('stream');
+const { log } = require('console');
 
 const bucket = firebaseAdmin.storage().bucket();
 
@@ -12,7 +13,6 @@ const addProduct = async (req, res) => {
   try {
     // Extract form data from JSON request body
     const {
-      userId,
       addToInventory,
       category,
       productName,
@@ -28,6 +28,8 @@ const addProduct = async (req, res) => {
       expirationReminderTime,
       message
     } = req.body;
+    const userId = req.locals.userId;
+
 
     const photoFiles = req.files;
     if (!photoFiles || photoFiles.length === 0) {
