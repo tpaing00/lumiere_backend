@@ -15,4 +15,24 @@ const getInternalUseList = async(req, res) => {
         return res.status(500).json(error.message);
     };
 }
-module.exports = {getInternalUseList};
+
+const getTotalInStore = (req, res) => {
+    InternalUse.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalSale: { $sum: "$quantity" },
+        },
+      },
+    ])
+      .exec()
+      .then((result) => {
+        res.status(200).json({ totalSale: result[0].totalSale });
+      })
+      .catch((error) => {
+        res.status(500).json(error);
+      });
+  };
+
+
+module.exports = {getInternalUseList, getTotalInStore};
