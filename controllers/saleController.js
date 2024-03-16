@@ -1,5 +1,5 @@
 const Sale = require("../models/Sale");
-const InStore = require("../models/InternalUse");
+
 
 const getSale = (req, res) => {
   const id = req.params.id;
@@ -88,28 +88,9 @@ const getTopSoldQuantitiesByProductName = (req, res) => {
     });
 };
 
-const getTotalInStore = (req, res) => {
-  InStore.aggregate([
-    {
-      $group: {
-        _id: null,
-        totalSale: { $sum: "$quantity" },
-      },
-    },
-  ])
-    .exec()
-    .then((result) => {
-      res.status(200).json({ totalSale: result[0].totalSale });
-    })
-    .catch((error) => {
-      res.status(500).json(error);
-    });
-};
-
 module.exports = {
   getTotalSale,
   getSale,
   getsoldQuantityByCategory,
   getTopSoldQuantitiesByProductName,
-  getTotalInStore,
 };
