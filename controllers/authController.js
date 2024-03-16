@@ -41,6 +41,7 @@ const setSignUp = async(req, res) => {
 const getLogin = async(req, res) => {
 
     const { email, password } = req.body;
+    // console.log("reached:" +JSON.stringify(req.body));
 
     try{
         const user = await User.findOne({ email }).exec();
@@ -65,17 +66,27 @@ const getLogin = async(req, res) => {
 const verifyToken = async(req, res, next) => {
 
     const token = req.headers.authorization?.split(' ')[1]; 
+    console.log("reached:1" );
+    console.log(token);
     if (!token) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
+    
+    
     try {
+        console.log(process.env.JWT_SECRET_KEY);
             jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
             if (err) {
                 console.error('JWT verification error:', err);
                 return res.status(403).json({ message: 'Failed to authenticate token' });
             }
             req.body.userId = decoded.id;
+            req.locals = {
+                userId: decoded.id // assuming decoded contains the token payload
+            };
+            // console.log("reached:" +JSON.stringify(req.body));
             // console.log("reached:" +decoded.id);
+            
             
             const userExists = User.findOne({_id : decoded.id}).exec();
             if (userExists) {
