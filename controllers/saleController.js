@@ -13,7 +13,7 @@ const getSale = (req, res) => {
         res.status(500).json(error);
       });
   } else {
-    Sale.find({ _id: id })
+    Sale.find({ inventoryId: id })
       .exec()
       .then((results) => {
         if (results == null) {
