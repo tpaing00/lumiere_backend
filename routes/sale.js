@@ -8,6 +8,5 @@ router.get("/sale/:id", saleCtrl.getSale);
 router.get("/totalsale", saleCtrl.getTotalSale);
 router.get("/soldbycategory", saleCtrl.getsoldQuantityByCategory)
 router.get("/topbyproductname", saleCtrl.getTopSoldQuantitiesByProductName)
-router.get("/totalinstore", saleCtrl.getTotalInStore)
 
 module.exports = router;
