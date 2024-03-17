@@ -203,10 +203,10 @@ const deleteProduct = async (req, res) => {
 
     if (inventoryCount > 1) {
       await Inventory.findOneAndDelete({ _id: inventoryRowToDelete._id });
-      //need to delete Notification base on inventoryId and addToInventory
+      await Notification.deleteOne({ inventoryId: inventoryRowToDelete._id });
     } else {
       await Inventory.findOneAndDelete({ _id: inventoryRowToDelete._id });
-      await Product.deleteOne({ barcodeNumber });
+      await Product.deleteMany({ barcodeNumber });
       await Notification.deleteOne({ inventoryId: inventoryRowToDelete._id });
     }
 
