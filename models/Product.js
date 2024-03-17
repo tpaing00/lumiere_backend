@@ -9,7 +9,8 @@ const ProductSchema = new Schema({
   category: { type: String, required: true , enum: ["Hair Care", "Skin Care", "Body Care", "Make Up"]},
   photo: { type: Array },
   periodAfterOpening: { type: Number, required: true },
-  message: { type: String }
+  message: { type: String , default:""},
+  location: { type: String , default:""},
 });
 
 const Product = mongoose.model('Product', ProductSchema)

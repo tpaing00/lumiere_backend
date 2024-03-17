@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const WasteSchema = new Schema({
     userId:{type: String, required:true, maxLength: 30, default:"sampleUserId"},
+    inventoryId: { type: Object, required: true, maxLength: 30 },
     barcodeNumber:{type: String, required:true, maxLength: 30},
     productName: { type: String, required: true },
     brandName: { type: String, required: true },
@@ -15,7 +16,8 @@ const WasteSchema = new Schema({
     addToInventory:{type: String, enum: ["Internal Use", "Retail"]},
     expiryDate: {type : Date, required:true},
     wasteQuantity:{type: Number, default:0},
-    reportDate:{type : Date, default: Date.now }
+    reportDate:{type : Date, default: Date.now },
+    message: { type: String }
 });
 
 const Waste = mongoose.model('Waste', WasteSchema);
