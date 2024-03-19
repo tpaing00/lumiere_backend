@@ -1,4 +1,5 @@
 const Sale = require("../models/Sale");
+const { parse } = require("date-fns");
 
 
 const getSale = (req, res) => {
@@ -65,27 +66,104 @@ const getsoldQuantityByCategory = (req, res) => {
 };
 
 const getTopSoldQuantitiesByProductName = (req, res) => {
-  Sale.aggregate([
-    {
-      $group: {
-        _id: "$productName",
-        totalSoldQuantity: { $sum: "$soldQuantity" },
+  const { fromDate, toDate } = req.query;
+  if (typeof fromDate == "undefined" && typeof toDate == "undefined") {
+    Sale.aggregate([
+      {
+        $group: {
+          _id: "$productName",
+          Sale: { $push: "$$ROOT" },
+          totalSoldQuantity: { $sum: "$soldQuantity" },
+        },
       },
-    },
-    {
-      $sort: { totalSoldQuantity: -1 },
-    },
-    {
-      $limit: 5,
-    },
-  ])
-    .exec()
-    .then((results) => {
-      res.status(200).json(results);
+      {
+        $sort: { totalSoldQuantity: -1 },
+      },
+      {
+        $limit: 5,
+      },
+    ])
+      .exec()
+      .then((results) => {
+        res.status(200).json(results);
+      })
+      .catch((error) => {
+        res.status(500).json(error);
+      });
+  } else {
+    // Parse dates from query parameters
+    let fromDateObj = null;
+    let toDateObj = new Date(); // Default to current date and time if toDate is not provided
+
+    if (fromDate) {
+      fromDateObj = parse(fromDate, "yyyy-MMM-dd", new Date());
+    }
+
+    if (toDate) {
+      toDateObj = parse(toDate, "yyyy-MMM-dd", new Date());
+    }
+
+    // Check if fromDateObj is valid
+    if (fromDateObj && isNaN(fromDateObj.getTime())) {
+      return res.status(400).json({ error: "Invalid fromDate" });
+    }
+
+    // Check if toDateObj is valid
+    if (toDateObj && isNaN(toDateObj.getTime())) {
+      return res.status(400).json({ error: "Invalid toDate" });
+    }
+
+    // Check if there's any data available in the specified date range
+    Sale.findOne({
+      soldDate: {
+        $gte: fromDateObj,
+        $lte: toDateObj,
+      },
     })
-    .catch((error) => {
-      res.status(500).json(error);
-    });
+      .exec()
+      .then((result) => {
+        if (!result) {
+          return res.status(404).json({
+            message: "No records available for the specified date range.",
+          });
+        }
+
+        Sale.aggregate([
+          {
+            $match: {
+              soldDate: {
+                $gte: fromDateObj,
+                $lte: toDateObj,
+              },
+            },
+          },
+          {
+            $group: {
+              _id: "$productName",
+              Sale: { $push: "$$ROOT" },
+              totalSoldQuantity: { $sum: "$soldQuantity" },
+            },
+          },
+          {
+            $sort: { totalSoldQuantity: -1 },
+          },
+          {
+            $limit: 5,
+          },
+        ])
+          .exec()
+          .then((results) => {
+            res.status(200).json(results);
+          })
+          .catch((error) => {
+            res.status(500).json(error);
+          });
+      })
+      .catch((error) => {
+        res.status(500).json(error);
+      });
+  }
+  
 };
 
 module.exports = {
