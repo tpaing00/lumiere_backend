@@ -168,8 +168,6 @@ const searchProductList = (req, res) => {
   // Combine filter and search queries
   const finalQuery = { ...filter, ...searchQuery };
   
-  console.log("Search query:", finalQuery); // Log the final search query
-
   Product.find(finalQuery)
     .exec()
     .then((results) => {
