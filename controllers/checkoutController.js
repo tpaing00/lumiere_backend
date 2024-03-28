@@ -45,8 +45,6 @@ const checkoutProduct = async (req, res) => {
             };
         }
         const UpdatatedInventoryResults = await Inventory.updateOne(filter, update);
-        // console.log('Inventory updated successfully');
-        // console.log(UpdatatedInventoryResults);  
             
         const updatedInventory = await Inventory.find({ _id: inventoryId });
         
